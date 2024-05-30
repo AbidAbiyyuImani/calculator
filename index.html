@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 200px;
+            margin: 0 auto;
+            box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+            border-radius: 20px;
+            background-color: #ffffff;
+        }
+
+        .calculator input#display1 {
+            grid-column: span 4;
+            padding: 20px;
+            font-size: 1.5em;
+            border: none;
+            outline: none;
+            text-align: right;
+            background-color: #eeeeee;
+        }
+
+        .calculator input#display2 {
+            grid-column: span 4;
+            padding: 10px;
+            font-size: 1.2em;
+            border: none;
+            outline: none;
+            text-align: right;
+            background-color: #eeeeee;
+        }
+
+        .calculator button {
+            padding: 20px;
+            font-size: 2em;
+            border: none;
+            outline: none;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s ease;
+        }
+
+        .calculator button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .calculator button:active {
+            background-color: #d0d0d0;
+        }
+
+        .calculator input#display1 {
+            grid-column: span 4;
+            padding: 20px;
+            font-size: 1.5em;
+            border: none;
+            outline: none;
+            text-align: right;
+            background-color: #fafafa;
+        }
+
+        .calculator input#display2 {
+            grid-column: span 4;
+            padding: 10px;
+            font-size: 1.2em;
+            border: none;
+            outline: none;
+            text-align: right;
+            background-color: #fafafa;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <!-- display input bos -->
+        <input type="text" id="display1" disabled>
+        <input type="text" id="display2" disabled>
+
+        <!-- button sama operatornya -->
+        <button onclick="performOperation('%')">%</button>
+        <button onclick="performOperation('sqrt')">√</button>
+        <button onclick="performOperation('/')">/</button>
+        <button onclick="performOperation('-')">-</button>
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="performOperation('*')">*</button>
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="performOperation('+')">+</button>
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="deleteNumber()">Del</button>
+        <button onclick="appendNumber('0')">0</button>
+        <button onclick="clearDisplay()">C</button>
+        <button style="grid-column: span 2;" onclick="calculateResult()">=</button>
+    </div>
+    <script>
+        let display1 = document.getElementById('display1');
+        let display2 = document.getElementById('display2');
+        let operand1 = '';
+        let operand2 = '';
+        let operator = null;
+    
+        function appendNumber(number) {
+            if (operator) {
+                operand2 += number;
+                display2.value = operand2;
+            } else {
+                operand1 += number;
+                display1.value = operand1;
+            }
+        }
+        function appendNumber(number) {
+            if (operator) {
+                operand2 += number;
+                display2.value = operator + ' ' + operand2;
+            } else {
+                operand1 += number;
+                display1.value = operand1;
+            }
+        }
+        function calculateResult() {
+            let result = eval(operand1 + operator + operand2);
+            display1.value = result;
+            operand1 = result;
+            operand2 = '';
+            operator = null;
+            display2.value = '';
+        }
+        function clearDisplay() {
+            operand1 = '';
+            operand2 = '';
+            operator = null;
+            display1.value = '';
+            display2.value = '';
+        }
+        function deleteNumber() {
+            if (display1.value && !operator && !operand2) {
+                display1.value = display1.value.slice(0, -1);
+                operand1 = display1.value;
+            } else if (operator && operand2.length === 0) {
+                operator = null;
+                display2.value = '';
+            } else if (operator) {
+                operand2 = operand2.slice(0, -1);
+                display2.value = operator + ' ' + operand2;
+            } else {
+                operand1 = operand1.slice(0, -1);
+                display1.value = operand1;
+            }
+        }
+        function performOperation(op) {
+            if (op === 'sqrt') {
+                operand1 = Math.sqrt(operand1);
+                display1.value = operand1;
+            } else if (op === '%') {
+                operand1 = operand1 / 100;
+                display1.value = operand1;
+            } else {
+                operator = op;
+                display2.value = operator;
+            }
+        }
+    </script>
+</body>
+</html>
+<!-- THANK YOU!!! -->
